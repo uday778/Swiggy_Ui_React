@@ -6,15 +6,18 @@ const toogleSlice = createSlice({
    name:"toogleSlice",
    initialState:{
     searchToogle:false,
-    name:"Search"
+    loginToggle:false
    },
    reducers:{
         toogleSearchBar:(state)=>{
             state.searchToogle=!state.searchToogle
+        },
+        toogleLogin:(state)=>{
+            state.loginToggle=!state.loginToggle
         }
    }
 })
 
 
-export const { toogleSearchBar } = toogleSlice.actions
+export const { toogleSearchBar,toogleLogin } = toogleSlice.actions
 export default toogleSlice.reducer

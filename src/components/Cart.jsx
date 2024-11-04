@@ -3,7 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart, deleteItem } from "../utils/cartSlice";
 import toast from "react-hot-toast";
+import { toogleLogin } from "../utils/toogleSlice";
 
+
+
+let veg = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Indian-vegetarian-mark.svg/768px-Indian-vegetarian-mark.svg.png"
+
+let nonveg = "https://www.vhv.rs/dpng/d/437-4370761_non-veg-icon-non-veg-logo-png-transparent.png"
 
 
 
@@ -11,9 +17,16 @@ function Cart() {
   // const { cartData, setCartData } = useContext(CartContext)
   const dispatch = useDispatch()
   const cartData = useSelector((state) => state.cartSlice.cartItems)
+  const resInfo = useSelector((state) => state.cartSlice.resInfo)
+
+  
   const userData=useSelector((state)=>state.authSlice.userData)
 
   const navigate=useNavigate()
+ 
+
+
+
 
   // const resInfo=useSelector((state)=>state.cartSlice.resInfo)
 
@@ -55,7 +68,7 @@ function Cart() {
   function handlePlaceOrder() {
     if(!userData){
       toast.error("Login please")
-      navigate("/signin")
+      dispatch(toogleLogin())
       return
     }
     toast.success("Ordered Place")
@@ -80,39 +93,142 @@ function Cart() {
 
   return (
     <div className="w-full">
-      <div className="w-[50%] mx-auto ">
-        {
-          cartData.map((data) => (
-            <div key={data.name} className="flex w-full  justify-between my-5 p-4">
-              <div className="w-[70%]">
-                <h2 className=" text-3xl  ">{data.name}</h2>
-                <p className="mt-5">&#8377;{data.price / 100 || data.defaultPrice / 100}</p>
-              </div>
+            <div className="w-[95%] md:w-[800px]  mx-auto">
+                <Link to={`/restaurantMenu/${resInfo.id}`}>
+                <div className="my-10 flex gap-5">
+                    <img
+                        className="rounded-xl w-40 aspect-square"
+                        src={
+                            "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/" +
+                            resInfo.cloudinaryImageId
+                        }
+                        alt=""
+                    />
+                    <div>
+                        <p className="text-5xl border-b-2 border-black pb-3 ">{resInfo.name}</p>
+                        <p className="mt-3 text-xl ">{resInfo.areaName}</p>
+                    </div>
+                </div>
+                </Link>
+                <hr  className="my-5 border-2"/>
+                <div>
+                    {cartData.map(
+                        (
+                            {
+                                name,
+                                defaultPrice,
+                                price,
+                                itemAttribute,
+                                ratings: {
+                                    aggregatedRating: { rating, ratingCountV2 },
+                                },
+                                description = "",
+                                imageId,
+                            },
+                        ) => {
+                            // const [isMore, setIsMore] = useState(false);
 
-              <div className="w-[30%] relative h-full">
-                <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${data.imageId}`} alt="" className="rounded-xl w-[70%]" />
-                <button
-                  onClick={(i) => handleRemoveFromCart(i)}
-                  className="bg-red-500 px-8 py-1 rounded-lg text-lg font-semibold   drop-shadow-md  hover:bg-slate-100  absolute z-10 bottom-[-20px] left-5 "
+                            let trimDes = description.substring(0, 138) + "...";
+                            return (
+                                <>
+                                    <div key={imageId} className="flex w-full my-5 justify-between min-h-[182px]">
+                                        <div className="w-[55%] md:w-[70%]">
+                                            <img
+                                                className="w-5 rounded-sm"
+                                                src={itemAttribute && itemAttribute.vegClassifier == "VEG" ? veg : nonveg}
 
-                >Remove</button>
-              </div>
+                                                alt=""
+                                                
+                                            />
+                                            <h2 className="font-bold text-lg">
+                                                {name}
+                                            </h2>
+                                            <p className="font-bold text-lg">
+                                                ₹
+                                                {defaultPrice / 100 ||
+                                                    price / 100}{" "}
+                                            </p>
 
+                                            <div className="flex items-center gap-1">
+                                                {" "}
+                                                <i
+                                                    className={
+                                                        "fi mt-1 text-xl fi-ss-star"
+                                                    }
+                                                ></i>{" "}
+                                                <span>
+                                                    {rating} ({ratingCountV2})
+                                                </span>
+                                            </div>
+
+                                            <div className="line-clamp-2">{description}</div>
+
+                                            {/* {description.length > 140 ? (
+                                                <div>
+                                                    <span className="">
+                                                        {isMore
+                                                            ? description
+                                                            : trimDes}
+                                                    </span>
+                                                    <button
+                                                        className="font-bold"
+                                                        onClick={() =>
+                                                            setIsMore(!isMore)
+                                                        }
+                                                    >
+                                                        {isMore
+                                                            ? "less"
+                                                            : "more"}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <span className="">
+                                                    {description}
+                                                </span>
+                                            )} */}
+                                        </div>
+                                        <div className="w-[40%] md:w-[20%] relative h-full">
+                                            <img
+                                                className="rounded-xl aspect-square"
+                                                src={
+                                                    "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/" +
+                                                    imageId
+                                                }
+                                                alt=""
+                                            />
+                                            <button
+                                                onClick={handleRemoveFromCart}
+                                                className="bg-white absolute bottom-[-20px] left-1/2 -translate-x-1/2 text-base text-red-500 font-bold rounded-xl border px-5 py-2 drop-shadow"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr className="my-10" />
+                                </>
+                            );
+                        }
+                    )}
+                </div>
+
+                <h1 className="text-2xl">Total - <span className="font-bold">₹{totalPrice}</span></h1>
+                <div className="flex justify-between">
+                    <button
+                        onClick={handlePlaceOrder}
+                        className="p-3 bg-green-600 rounded-lg my-7"
+                    >
+                        Place order
+                    </button>
+                    <button
+                        onClick={handleClearCart}
+                        className="p-3 bg-green-600 rounded-lg my-7"
+                    >
+                        clear cart
+                    </button>
+                </div>
             </div>
-          ))
-        }
-        <h1>&#8377;{totalPrice}</h1>
-
-        <div className="flex justify-between">
-          <button className="p-3 bg-green-600 rounded-lg my-4 text-white" onClick={handleClearCart}>Clear Cart</button>
-          <button className="p-3 bg-green-600 rounded-lg my-4 text-white" onClick={handlePlaceOrder}>Place order</button>
         </div>
-
-      </div>
-
-
-    </div>
-  )
+    );
 }
 
 export default Cart;
