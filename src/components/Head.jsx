@@ -1,12 +1,10 @@
 
-import logo from "../assets/swiggy.png";
+
 import { IoIosArrowDown, IoIosSearch } from "react-icons/io";
-import { IoBagOutline, IoCartOutline } from "react-icons/io5";
+import { IoCartOutline } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
 import { FaRegUser } from "react-icons/fa6";
-import { RiDiscountPercentLine } from "react-icons/ri";
-import { CgPokemon } from "react-icons/cg";
 import { Link, Outlet } from "react-router-dom";
 import { useContext, useState } from "react";
 import { Coordinates, } from "../context/contextApi";
@@ -30,24 +28,11 @@ function Head() {
   const userData = useSelector((state) => state.authSlice.userData)
 
   const navItems = [
-    {
-      name: "Swiggy Corporate",
-      icon: <IoBagOutline />,
-      path: "/corporate"
-    },
+
     {
       name: "Search",
       icon: <IoIosSearch />,
       path: "/search"
-    },
-    {
-      name: "Offer",
-      icon: <RiDiscountPercentLine />,
-      path: "/offer"
-    },
-    {
-      name: "Help",
-      icon: <CgPokemon />,
     },
     {
       name: "Sign In",
@@ -95,7 +80,7 @@ function Head() {
   }
 
   return (
-    <>
+    <div className="">
       <div className="w-full ">
         <div
           onClick={handleVisibity}
@@ -181,60 +166,92 @@ function Head() {
               <h2 className="font-bold text-4xl border-b-2 pb-5 border-black">Login</h2>
               <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r" alt="" className="w-28" />
             </div>
-           <SignInBtn/>
+            <SignInBtn />
             <p className="text-sm my-5 opacity-60">By clicking on Login, I accept the Terms &
-            Conditions & Privacy Policy</p>
+              Conditions & Privacy Policy</p>
           </div>
         </div>
       </div>
 
-      <div className="">
-        <div className="h-20 w-full shadow-md flex justify-center items-center sticky ">
-          <div className="   w-[80%] flex justify-between">
-            <div className="flex  items-center">
-              <Link to={"/"}> <img src={logo} className="w-16 px-4" />
+      <div className="relative w-full">
+        <div className="h-24 w-full shadow-md flex justify-center items-center sticky bg-white top-0 z-20 ">
+          <div className=" w-full sm-w-[90%] lg-w-[80%] md:w-[75%]  flex justify-between px-8">
+            <div className="flex  items-center ">
+
+              <Link to={"/"}>
+                <div className="w-20 ">
+                  <img src="https://1000logos.net/wp-content/uploads/2021/05/Swiggy-emblem.png" />
+                </div>
+
               </Link>
-              <div className="flex justify-evenly" onClick={handleVisibity}>
-                <p className="font-semibold  border-b-2  border-black pb-1 hover:text-orange-500 text-sm">Other`s</p>
-                {address && <span className="ml-2
-               line-clamp-1 
-              text-sm opacity-80 w-[250px] mt-2">{address}</span>
-                }
-                <IoIosArrowDown className="mt-1 ml-2 gap-2 text-orange-500" />
+              <div className=" flex items-center gap-2" onClick={handleVisibity}>
+                <p className="flex items-center"><span className="font-bold border-b-2  border-black">Other`s</span>
+                  <span className="ml-1 max-w-[250px] text-sm opacity-85 line-clamp-1">{address}</span>
+                </p>
+                <IoIosArrowDown className="gap-1 text-xl text-orange-500" />
               </div>
 
             </div>
 
-            <div className="flex items-center gap-10 font-semibold px-2">
+            <div className=" hidden md:flex items-center md:gap-14 gap-2 font-semibold  px-2">
               {
                 navItems && navItems?.map((item) => (
-                  item.name == "Sign In" ?
+                  item.name == "Sign In" ? (
                     <div
                       onClick={handleLogin}
-                      key={item.name}>
-                      <div className="flex items-center gap-2"  >
+                      key={item.path}>
+                      <div className="flex items-center gap-3"  >
 
                         {
-                          userData ? (<img src={userData.photo} alt="" />)
+                          userData ? (<img src={userData.photo} alt="" className="w-10 h-10 rounded-full " />)
                             :
-                            (<span className="mt-1 w-6">{item.icon}</span>)
+                            (<span className="mt-1 text-xl text-gray-700">{item.icon}</span>)
                         }
                         <p>{userData ? userData.name : item.name}</p>
                         {
                           item?.name === "Cart" && cartData && <p>{cartData.length}</p>
                         }
                       </div>
-                    </div>
+                    </div>)
                     :
-                    <Link to={item.path} key={item.name}>
+
+                    (<Link to={item.path} key={item.name}>
                       <div className="flex items-cente gap-2"  >
-                        <span className="mt-1 w-6">{item.icon}</span>
+                        <span className="mt-1 text-xl text-gray-700">{item.icon}</span>
                         <p>{item.name}</p>
                         {
                           item?.name === "Cart" && cartData && <p>{cartData.length}</p>
                         }
                       </div>
-                    </Link>
+                    </Link>)
+                ))
+              }
+            </div>
+
+
+
+
+            <div className="flex items-center md:hidden gap-10 mr-4 ">
+              {
+                navItems.map((data, i) => (
+                  data.name == "Sign In" ? (
+                    <div key={data.name} to={data.path} onClick={handleLogin}>
+                      <span key={i} className="mt-1 text-xl">{data.icon}</span>
+                    </div>
+                  )
+                    :
+                    (
+                      <Link to={data.path} key={data.name}>
+                        
+                          <span key={data.name} className="mt-1 text-xl">{data.icon}</span>
+                          {
+                            data.name == "Cart" && <sup>{cartData.length}</sup>
+                          }
+                        
+
+                      </Link>
+
+                    )
                 ))
               }
             </div>
@@ -243,7 +260,7 @@ function Head() {
         </div>
         <Outlet />
       </div>
-    </>
+    </div>
   );
 }
 

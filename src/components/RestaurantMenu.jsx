@@ -6,7 +6,7 @@ import parse from "html-react-parser";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { IoIosArrowDown, IoIosArrowUp, IoIosSearch } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
-import {  Coordinates } from "../context/contextApi";
+import { Coordinates } from "../context/contextApi";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocart, clearCart } from "../utils/cartSlice";
 import toast from "react-hot-toast";
@@ -83,7 +83,7 @@ function RestaurantMenu() {
   }, [lat, lng]);
   return (
     <div className="w-full">
-      <div className="w-[800px]  mx-auto pt-10">
+      <div className="md:w-[800px]   mx-auto pt-10 w-[93%]">
         <p className="text-[12px] text-slate-400  ">
           {" "}
           <Link to="/">
@@ -267,8 +267,8 @@ function Discount({
 
 function MenuCard({ card, resInfo }) {
   const [isMore, setIsMore] = useState(false);
-  
-  
+
+
 
   let hello = false
   if (card?.["@type"]) {
@@ -334,7 +334,7 @@ function MenuCard({ card, resInfo }) {
 
 function DetailMenu({ itemCards, resInfo }) {
 
-  
+
 
 
   return (
@@ -365,16 +365,19 @@ function Detailmenucard({ info, resInfo }) {
     defaultPrice,
     itemAttribute: { vegClassifier }
   } = info
+  console.log(description.length);
 
   const [isMore, setIsMore] = useState(false)
-  const trimDes = description?.substring(0, 125);
+  let trimDes = description.substring(0, 138) + "...";
+
+
 
   // const { cartData, setCartData } = useContext(CartContext)
 
   const cartData = useSelector((state) => state.cartSlice.cartItems)
   const dispatch = useDispatch()
   const getResInfoFromLocalStorage = useSelector((state) => state.cartSlice.resInfo)
-  const [isDiffRes,setisDiffRes]=useState(false)
+  const [isDiffRes, setisDiffRes] = useState(false)
 
 
 
@@ -390,71 +393,74 @@ function Detailmenucard({ info, resInfo }) {
       else {
         // alert("different restaurent Item")
         toast.error("Different Restaurant Item")
-        setisDiffRes((prev)=>!prev)
+        setisDiffRes((prev) => !prev)
       }
     }
     else {
       // alert("already added to cart");
       toast.error("Already Added"
-    )
+      )
     }
   }
 
-  function handleIsDiffRes(){
-    setisDiffRes((prev)=>!prev)
+  function handleIsDiffRes() {
+    setisDiffRes((prev) => !prev)
   }
-  function handleClearCart(){
+  function handleClearCart() {
     dispatch(clearCart())
     handleIsDiffRes()
-    
-   }
+
+  }
 
 
   return (
     <div className="relative">
-    <div className="flex      justify-between w-full mt-5 min-h-[182px] ">
-      <div className=" w-[70%]">
-        <img src={vegClassifier == "VEG" ? veg : nonveg} alt="" className="w-4 rounded-sm" />
-        <h2 className="font-bold text-lg ">{name}</h2>
-        <p className="font-bold text-lg ">₹{defaultPrice / 100 || price / 100}</p>
-        <p className=" flex items-center gap-2"><FaStar className="text-green-600 " />{rating && <span>{rating} ({ratingCountV2})</span>}</p>
-        {
-          trimDes?.length > 120 ?
-            <div>
-              <span>{isMore ? description : trimDes}</span>
-              <button className="font-bold ml-2 hover:underline" onClick={() => setIsMore(!isMore)}>{isMore ? "less" : "more"} </button>
-            </div> : <span>{trimDes}</span>
-        }
+      <div className="flex justify-between w-full mt-5 min-h-[182px] px-4">
+        <div className=" md:w-[70%] w-[55%]">
+          <img src={vegClassifier == "VEG" ? veg : nonveg} alt="" className="w-4 rounded-sm" />
+          <h2 className="font-bold text-lg ">{name}</h2>
+          <p className="font-bold text-lg ">₹{defaultPrice / 100 || price / 100}</p>
+          <p className=" flex items-center gap-2"><FaStar className="text-green-600 " />{rating && <span>{rating} ({ratingCountV2})</span>}</p>
+          {
+            description.length > 140 ?
+              <div>
+                <span className="line-clamp-2 md:line-clamp-none">{isMore ? description : trimDes}</span>
+                <button className="font-bold ml-2 hover:underline hidden md:block" onClick={() => setIsMore(!isMore)}>{isMore ? "less" : "more"} </button>
+              </div> : <span>{trimDes}</span>
+          }
 
-      </div>
-
-
-      <div className="w-[20%] relative ">
-        <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`} alt="" className="rounded-xl aspect-square" />
-        <button className="bg-white border border-black px-8 py-1 rounded-lg text-lg font-semibold   drop-shadow-md  text-green-600 hover:bg-slate-100  absolute z-10 bottom-3 right-7  "
-          onClick={handleAddTocart}
-        >Add</button>
-      </div>
-    </div>
-    <hr className="my-5"></hr>
-    {
-      isDiffRes&&(
-        <div className="w-[520px] mx-auto h-[204px] border  fixed bottom-10 shadow-sm left-[35%] p-8 z-10 bg-white">
-          <h1>Items Already In Cart</h1>
-          <p>Your Cart Contain items from other restaurant.
-            would you like to reset your cart for adding items from this restaurant ?
-          </p>
-          <div className="flex   justify-between w-full  uppercase gap-2  p-4  border-2">
-            <button
-            onClick={handleIsDiffRes}
-            className="w-1/2 p-3 border-green-600 text-green-600   border-2">No</button>
-            <button 
-            onClick={handleClearCart}
-            className=" w-1/2 p-3 bg-green-600 text-white border-2">Yes,Start Afresh</button>
-          </div>
         </div>
-      )
-    }
+        <div className="w-[40%] md:w-[20%] relative h-full ">
+          <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`} alt="" className="rounded-xl aspect-square" />
+          <button className="bg-white absolute bottom-[-20px] left-1/2  -translate-x-1/2 text-lg text-green-700 font-bold rounded-xl border px-10 py-2 drop-shadow  "
+            onClick={handleAddTocart}
+          >Add</button>
+        </div>
+      </div>
+      <hr className="my-5"></hr>
+
+      {
+        isDiffRes && (
+          <div className="w-[90%] sm:w-[520px] h-auto mx-auto border fixed bottom-10 shadow-sm left-[5%] sm:left-1/2 sm:transform sm:-translate-x-1/2 lg:w-[520px] p-4 md:p-6 lg:p-8 z-10 bg-white">
+            <h1 className="text-lg font-semibold">Items Already In Cart</h1>
+            <p className="text-sm mt-2">
+              Your cart contains items from another restaurant. Would you like to reset your cart to add items from this restaurant?
+            </p>
+            <div className="flex justify-between w-full uppercase gap-2 p-4 border-t mt-4">
+              <button
+                onClick={handleIsDiffRes}
+                className="w-1/2 p-2 md:p-3 border-green-600 text-green-600 border-2">
+                No
+              </button>
+              <button
+                onClick={handleClearCart}
+                className="w-1/2 p-2 md:p-3 bg-green-600 text-white border-2">
+                Yes, Start Afresh
+              </button>
+            </div>
+          </div>
+        )
+      }
     </div>
   )
 

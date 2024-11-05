@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 
 
+
 function Body() {
   const[topRestaurantData,setTopRestaurantData]=useState([])
   const[onYourMind,setOnYourMind]=useState([])
@@ -22,13 +23,17 @@ const {coord:{lat,lng}}=useContext(Coordinates)
       `https://www.swiggy.com/dapi/restaurants/list/v5?lat=${lat}&lng=${lng}&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`
     );    
     const response = await data.json();
-    setData(response?.data)
+    setData(response?.data)    
    setResTitle(response?.data?.cards[1]?.card?.card?.header?.title);
+   
+   
     setOnlineTitle(response?.data?.cards[2]?.card?.card?.title);
     setTopRestaurantData(
       response?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
         ?.restaurants
     );
+
+
     setOnYourMind(response?.data?.cards[0]?.card?.card?.imageGridCards?.info)
     
   }
@@ -39,13 +44,15 @@ const {coord:{lat,lng}}=useContext(Coordinates)
 
   const filterVal = useSelector((state) => state?.filterSlice?.filterVal);
 
-  console.log(topRestaurantData);
+
+  
+  
   
   
   
 
 
-    const filteredData = topRestaurantData.filter((item) => { 
+    const filteredData = topRestaurantData?.filter((item) => { 
         if (!filterVal) return true;
 
         switch (filterVal) {
@@ -84,7 +91,7 @@ const {coord:{lat,lng}}=useContext(Coordinates)
 
   return (
    <div className="w-full ">
-      <div className="w-[75%] mx-auto mt-6 overflow-hidden ">
+      <div className="md:w-[75%] w-full sm:w-[90%]  mx-auto mt-6 overflow-hidden px-8 lg:w-[80%]">
         <OnYourMind data={onYourMind} />
         <TopResturents data={topRestaurantData} title={TopResTitle} />
         <OnlineFoodDelivery data={filterVal?filteredData:topRestaurantData} title={OnlineTitle}/>

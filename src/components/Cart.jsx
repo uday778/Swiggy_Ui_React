@@ -95,7 +95,7 @@ function Cart() {
     <div className="w-full">
             <div className="w-[95%] md:w-[800px]  mx-auto">
                 <Link to={`/restaurantMenu/${resInfo.id}`}>
-                <div className="my-10 flex gap-5">
+                <div className="my-10 flex gap-2 md:gap-5">
                     <img
                         className="rounded-xl w-40 aspect-square"
                         src={
@@ -105,8 +105,8 @@ function Cart() {
                         alt=""
                     />
                     <div>
-                        <p className="text-5xl border-b-2 border-black pb-3 ">{resInfo.name}</p>
-                        <p className="mt-3 text-xl ">{resInfo.areaName}</p>
+                        <p className="md:text-5xl text-lg border-b-2 border-black pb-3  font-semibold">{resInfo.name}</p>
+                        <p className="mt-3 md:text-xl  text-md">{resInfo.areaName}</p>
                     </div>
                 </div>
                 </Link>
@@ -204,7 +204,7 @@ function Cart() {
                                             </button>
                                         </div>
                                     </div>
-                                    <hr className="my-10" />
+                                    <hr className="my-10 border-2" />
                                 </>
                             );
                         }
