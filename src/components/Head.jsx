@@ -145,33 +145,42 @@ function Head() {
 
         </div>
       </div>
-      <div className="w-full ">
-        <div
-          onClick={handleLogin}
-          className={
-            "w-full bg-black/50 z-30 h-full overflow-hidden absolute " +
-            (loginvisible ? "visible " : " invisible")
-          }
-        ></div>
-        <div
-          className={
-            " bg-white flex  w-full md:w-[40%] h-full overflow-hidden p-5 z-40 absolute duration-500 " +
-            (loginvisible ? "right-0" : "-right-[100%]")
-          }
-        >
 
-          <div className=" m-4 w-[60%]  ">
-            <RxCross2 onClick={handleLogin} className="text-2xl cursor-pointer" />
-            <div className="w-full flex justify-between my-10 items-center">
-              <h2 className="font-bold text-4xl border-b-2 pb-5 border-black">Login</h2>
-              <img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r" alt="" className="w-28" />
+      <div className="w-full">
+                <div
+                    onClick={handleLogin}
+                    className={
+                        "w-full bg-black/50 z-30 h-full absolute " +
+                        (loginvisible ? "visible " : " invisible")
+                    }
+                ></div>
+                <div
+                    className={
+                        " bg-white flex   w-full md:w-[40%] h-full p-5 z-40 fixed duration-500 " +
+                        (loginvisible ? "right-0" : "-right-[100%]")
+                    }
+                >
+                    <div className=" m-3 w-full lg:w-[60%] ">
+                    <RxCross2 onClick={handleLogin} className="hover:scale-125 hover:text-red-500" />
+                        <div className="my-10 w-full flex justify-between items-center">
+                            <h2 className="font-bold text-4xl border-b-2 border-black pb-5 ">
+                                Login
+                            </h2>
+                            <img
+                                className="w-28"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r"
+                                alt=""
+                            />
+                        </div>
+
+                        <SignInBtn />
+                        <p className="text-base mt-2 opacity-70">
+                            By clicking on Login, I accept the Terms &
+                            Conditions & Privacy Policy
+                        </p>
+                    </div>
+                </div>
             </div>
-            <SignInBtn />
-            <p className="text-sm my-5 opacity-60">By clicking on Login, I accept the Terms &
-              Conditions & Privacy Policy</p>
-          </div>
-        </div>
-      </div>
 
       <div className="relative w-full">
         <div className="h-24 w-full shadow-md flex justify-center items-center sticky bg-white top-0 z-20 ">

@@ -15,7 +15,6 @@ function OnlineFoodDelivery({ data ,title}) {
 
   function handleFilterBtn (filterName) {
       setActiveBtn(activeBtn === filterName  ? null : filterName)
-      console.log(activeBtn);
       
   }
   dispatch(setFilterValue(activeBtn))

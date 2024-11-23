@@ -135,7 +135,7 @@ function Cart() {
                                         <div className="w-[55%] md:w-[70%]">
                                             <img
                                                 className="w-5 rounded-sm"
-                                                src={itemAttribute && itemAttribute.vegClassifier == "VEG" ? veg : nonveg}
+                                                src={itemAttribute && itemAttribute?.vegClassifier == "VEG" ? veg : nonveg}
 
                                                 alt=""
                                                 

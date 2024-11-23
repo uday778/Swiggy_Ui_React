@@ -10,6 +10,7 @@ import { Coordinates } from "../context/contextApi";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocart, clearCart } from "../utils/cartSlice";
 import toast from "react-hot-toast";
+import AddtoCartBtn from "./AddtoCartBtn";
 
 
 
@@ -35,6 +36,7 @@ function RestaurantMenu() {
   const [resInfo, setResInfo] = useState([]);
   const [discountData, setDiscountData] = useState([]);
   const [topPicksData, setTopPicksData] = useState([])
+  
   const { coord: { lat, lng } } = useContext(Coordinates)
 
 
@@ -363,45 +365,21 @@ function Detailmenucard({ info, resInfo }) {
     price,
     ratings: { aggregatedRating: { rating, ratingCountV2 } },
     defaultPrice,
-    itemAttribute: { vegClassifier }
+    itemAttribute
   } = info
-  console.log(description.length);
+  
 
   const [isMore, setIsMore] = useState(false)
   let trimDes = description.substring(0, 138) + "...";
 
 
-
-  // const { cartData, setCartData } = useContext(CartContext)
-
-  const cartData = useSelector((state) => state.cartSlice.cartItems)
   const dispatch = useDispatch()
-  const getResInfoFromLocalStorage = useSelector((state) => state.cartSlice.resInfo)
+  
   const [isDiffRes, setisDiffRes] = useState(false)
 
 
 
-  function handleAddTocart() {
-    const isAdded = cartData?.length > 0 && cartData.find((data) => data.id === info.id);
-    // let getResInfoFromLocalStorage=JSON.parse(localStorage.getItem("resInfo"))|| []
-
-    if (!isAdded) {
-      if (getResInfoFromLocalStorage.name === resInfo?.name || getResInfoFromLocalStorage.length === 0) {
-        dispatch(addTocart({ info, resInfo }))
-        toast.success("Item Added To Cart")
-      }
-      else {
-        // alert("different restaurent Item")
-        toast.error("Different Restaurant Item")
-        setisDiffRes((prev) => !prev)
-      }
-    }
-    else {
-      // alert("already added to cart");
-      toast.error("Already Added"
-      )
-    }
-  }
+  
 
   function handleIsDiffRes() {
     setisDiffRes((prev) => !prev)
@@ -417,7 +395,7 @@ function Detailmenucard({ info, resInfo }) {
     <div className="relative">
       <div className="flex justify-between w-full mt-5 min-h-[182px] px-4">
         <div className=" md:w-[70%] w-[55%]">
-          <img src={vegClassifier == "VEG" ? veg : nonveg} alt="" className="w-4 rounded-sm" />
+          <img src={itemAttribute&&itemAttribute?.vegClassifier == "VEG" ? veg : nonveg} alt="" className="w-4 rounded-sm" />
           <h2 className="font-bold text-lg ">{name}</h2>
           <p className="font-bold text-lg ">₹{defaultPrice / 100 || price / 100}</p>
           <p className=" flex items-center gap-2"><FaStar className="text-green-600 " />{rating && <span>{rating} ({ratingCountV2})</span>}</p>
@@ -432,9 +410,7 @@ function Detailmenucard({ info, resInfo }) {
         </div>
         <div className="w-[40%] md:w-[20%] relative h-full ">
           <img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_300,h_300,c_fit/${imageId}`} alt="" className="rounded-xl aspect-square" />
-          <button className="bg-white absolute bottom-[-20px] left-1/2  -translate-x-1/2 text-lg text-green-700 font-bold rounded-xl border px-10 py-2 drop-shadow  "
-            onClick={handleAddTocart}
-          >Add</button>
+          <AddtoCartBtn info={info} resInfo={resInfo} handleIsDiffRes={handleIsDiffRes} />
         </div>
       </div>
       <hr className="my-5"></hr>

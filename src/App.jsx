@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { CartContext, Coordinates } from "./context/contextApi";
 import Cart from "./components/Cart";
+import Search from "./components/Search";
 
 
 
@@ -44,6 +45,7 @@ function App() {
               <Route path="/" element={<Body />} />
               <Route path="/restaurantmenu/:id" element={<RestaurantMenu />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/search" element={<Search />} />
               
               <Route path="*" element={<h1>comming soon....</h1> } />
             </Route>
